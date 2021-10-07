@@ -1,5 +1,5 @@
-import { CustomerDef } from '../proto/customer/customer_pb';
-import { getCustomer } from '../services/CustomerService';
+import { CustomerDef, Comment } from '../proto/customer/customer_pb';
+import { getCustomer, getCustomerComments } from '../services/CustomerService';
 
 export const getCustomerBD = async (count: number): Promise<CustomerDef> => {
     const customer = new CustomerDef();
@@ -15,5 +15,21 @@ export const getCustomerBD = async (count: number): Promise<CustomerDef> => {
         
     } catch (error) {
         return Promise.reject(error);
+    }
+}
+
+export const getCommentsBD = async (id: number): Promise<Comment[]> => {
+    try {
+        let comments: any[] = [];
+
+        const commentsBD: any[] = await getCustomerComments(id) as Comment.AsObject[];
+        commentsBD.forEach(comment => {
+            const commentDef = new Comment();
+            commentDef.setComment(comment.comment);
+            comments.push(commentDef);
+        });
+        return Promise.resolve(comments);
+    } catch (re) {
+        return Promise.reject(re);
     }
 }

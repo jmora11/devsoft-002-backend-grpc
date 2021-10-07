@@ -7,6 +7,7 @@ import "google/protobuf/empty.proto";
 service Customer {
   rpc SaveCustomers (stream CustomerDef) returns (CustomerResponse) {};
   rpc GetRamdomCustomer (google.protobuf.Empty) returns (CustomerDef) {};
+  rpc GetComments(CustomerDef) returns (stream Comment) {};
 }
 
 enum UserStatus {
@@ -16,6 +17,9 @@ enum UserStatus {
   AVAILABLE = 3;
 }
 
+message Comment {
+  string comment = 1;
+}
 message CustomerDef {
   string name = 1;
   int32 age = 2;

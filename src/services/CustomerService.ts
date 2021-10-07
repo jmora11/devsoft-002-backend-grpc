@@ -54,3 +54,37 @@ export async function getCustomer(id: number): Promise<any>{
         return Promise.reject('error in bd');
     }
 }
+
+export async function getCustomerId(name: string): Promise<any>{
+    try {
+        const responseQuery = await sequelizeMySQL.query(
+            `SELECT id_customer FROM customersstrem where name=:name limit 1;`,
+            {
+                type: sequelizeMySQL.QueryTypes.SELECT,
+                replacements: {
+                    name
+                }
+            }
+        );
+        return Promise.resolve(responseQuery);
+    } catch (error) {
+        return Promise.reject('error in bd');
+    }
+}
+
+export async function getCustomerComments(id: number): Promise<any>{
+    try {
+        const responseQuery = await sequelizeMySQL.query(
+            `SELECT comment FROM customersstrem INNER JOIN comments WHERE customersstrem.id_customer=:id AND comments.id_user=:id`,
+            {
+                type: sequelizeMySQL.QueryTypes.SELECT,
+                replacements: {
+                    id
+                }
+            }
+        );
+        return Promise.resolve(responseQuery);
+    } catch (error) {
+        return Promise.reject('error in bd');
+    }
+}
