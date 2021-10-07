@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package customer;
+
+import "google/protobuf/empty.proto";
+
+service Customer {
+  rpc SaveCustomers (stream CustomerDef) returns (CustomerResponse) {};
+  rpc GetRamdomCustomer (google.protobuf.Empty) returns (CustomerDef) {};
+}
+
+enum UserStatus {
+  UNKNOWN = 0;
+  OFFLINE = 1;
+  BUSY = 2;
+  AVAILABLE = 3;
+}
+
+message CustomerDef {
+  string name = 1;
+  int32 age = 2;
+  UserStatus status = 3;
+}
+
+message CustomerResponse {
+  string message = 1;
+}
