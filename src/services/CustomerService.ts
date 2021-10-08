@@ -88,3 +88,20 @@ export async function getCustomerComments(id: number): Promise<any>{
         return Promise.reject('error in bd');
     }
 }
+
+export async function addComments(comment: string): Promise<any>{
+    try {
+        const responseQuery = await sequelizeMySQL.query(
+            `INSERT INTO comments (comment, id_user) VALUES (:comment, 34)`,
+            {
+                type: sequelizeMySQL.QueryTypes.INSERT,
+                replacements: {
+                    comment
+                }
+            }
+        );
+        return Promise.resolve('ok');
+    } catch (error) {
+        return Promise.reject('error in bd');
+    }
+}

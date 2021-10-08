@@ -1,9 +1,9 @@
 import * as grpc from '@grpc/grpc-js';
-import { sendUnaryData } from 'grpc';
+import { sendUnaryData, ServerDuplexStream } from 'grpc';
 import { CustomerDef, CustomerResponse, Comment } from '../proto/customer/customer_pb';
 import { CustomerService, ICustomerServer } from '../proto/customer/customer_grpc_pb';
 import { Empty } from 'google-protobuf/google/protobuf/empty_pb';
-import { countCustomers, createCustomer, getCustomerComments, getCustomerId } from "../services/CustomerService";
+import { addComments, countCustomers, createCustomer, getCustomerComments, getCustomerId } from "../services/CustomerService";
 import { getCommentsBD, getCustomerBD } from '../utils/utils';
 
 class CustomerHandler implements ICustomerServer {
@@ -58,7 +58,21 @@ class CustomerHandler implements ICustomerServer {
             reply.setMessage(`Se añadieron usuarios ${customers.length}`);
             callback(null, reply);
         });
-    };
+    }
+
+    public liveChat = async(call: ServerDuplexStream<Comment, Comment>
+    ): Promise<void> => {
+        const com = await getCommentsBD(34);
+
+        for (const comment of com) {
+            call.write(comment);
+        }
+        call.on('data', async(comment: Comment) => {
+            const comentt = comment.toObject();
+            await addComments(comentt.comment);
+        });
+        call.on('end', () => call.end());
+    }
 }
 
 export default {

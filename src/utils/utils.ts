@@ -33,3 +33,7 @@ export const getCommentsBD = async (id: number): Promise<Comment[]> => {
         return Promise.reject(re);
     }
 }
+
+export const getLiveChat = async (): Promise<any> => {
+    getCommentsBD(34);
+}

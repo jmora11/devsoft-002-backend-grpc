@@ -8,6 +8,7 @@ service Customer {
   rpc SaveCustomers (stream CustomerDef) returns (CustomerResponse) {};
   rpc GetRamdomCustomer (google.protobuf.Empty) returns (CustomerDef) {};
   rpc GetComments(CustomerDef) returns (stream Comment) {};
+  rpc LiveChat(stream Comment) returns (stream Comment) {};
 }
 
 enum UserStatus {
